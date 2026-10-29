@@ -219,13 +219,15 @@
 }
 
 .project-stills {
-  display: grid;
+  display: flex;
   gap: 14px;
   margin-top: 14px;
 }
 
 .project-stills img {
-  width: 100%;
+  flex-basis: 0;
+  min-width: 0;
+  height: auto;
   background: #e6e3de;
 }
 
@@ -339,6 +341,14 @@
 
   .project-caption {
     display: block;
+  }
+
+  .project-stills {
+    flex-direction: column;
+  }
+
+  .project-stills img {
+    width: 100%;
   }
 
   .project-caption span {

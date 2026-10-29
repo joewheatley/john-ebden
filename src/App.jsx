@@ -14,14 +14,20 @@ const projects = [
     stills: [
       {
         image: `${baseUrl}work/sky-pause-carry-on/concept-1.jpg`,
+        width: 2400,
+        height: 1331,
         alt: 'Rendered visual of the apartment at dusk, with an arc lamp, sofa and floor-to-ceiling windows onto the city',
       },
       {
         image: `${baseUrl}work/sky-pause-carry-on/concept-2.jpg`,
+        width: 1600,
+        height: 916,
         alt: 'Rendered visual of the apartment with timber floor, open shelving and a night-time city view',
       },
       {
         image: `${baseUrl}work/sky-pause-carry-on/set-build.jpg`,
+        width: 2400,
+        height: 1462,
         alt: 'The apartment set under construction on a raised platform in a studio',
       },
     ],
@@ -105,8 +111,17 @@ function ProjectPage({ project }) {
       </div>
 
       <div className="project-stills">
+        {/* Each still grows in proportion to its aspect ratio, so the row shares one height. */}
         {project.stills.map((still) => (
-          <img key={still.image} src={still.image} alt={still.alt} loading="lazy" />
+          <img
+            key={still.image}
+            src={still.image}
+            alt={still.alt}
+            width={still.width}
+            height={still.height}
+            loading="lazy"
+            style={{ flexGrow: still.width / still.height }}
+          />
         ))}
       </div>
     </article>
