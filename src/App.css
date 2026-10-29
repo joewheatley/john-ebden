@@ -229,7 +229,7 @@
   transition: color 160ms ease;
 }
 
-.project-arrow:hover {
+.project-arrow[href]:hover {
   color: #161616;
 }
 

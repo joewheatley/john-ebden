@@ -178,24 +178,23 @@ function ProjectPage({ project }) {
           />
         </div>
 
-        {pagedProjects.length > 1 && (
-          <>
-            <a
-              className="project-arrow project-arrow-previous"
-              href={`?project=${previous.slug}`}
-              aria-label={`Previous project: ${previous.title}`}
-            >
-              <Chevron direction="left" />
-            </a>
-            <a
-              className="project-arrow project-arrow-next"
-              href={`?project=${next.slug}`}
-              aria-label={`Next project: ${next.title}`}
-            >
-              <Chevron direction="right" />
-            </a>
-          </>
-        )}
+        {/* With only one project page the arrows still show, but have nowhere to go yet. */}
+        <a
+          className="project-arrow project-arrow-previous"
+          href={previous === project ? undefined : `?project=${previous.slug}`}
+          aria-label={`Previous project: ${previous.title}`}
+          aria-disabled={previous === project || undefined}
+        >
+          <Chevron direction="left" />
+        </a>
+        <a
+          className="project-arrow project-arrow-next"
+          href={next === project ? undefined : `?project=${next.slug}`}
+          aria-label={`Next project: ${next.title}`}
+          aria-disabled={next === project || undefined}
+        >
+          <Chevron direction="right" />
+        </a>
       </div>
 
       <div className="project-stills">
