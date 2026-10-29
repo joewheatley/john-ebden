@@ -6,9 +6,25 @@ const baseUrl = import.meta.env.BASE_URL
 const projects = [
   {
     title: 'Sky: Pause and Carry On',
+    slug: 'sky-pause-and-carry-on',
     category: 'Commercial',
     image: `${baseUrl}work/sky-pause-carry-on-frame.jpg`,
     alt: 'A dusk-lit apartment living room with floor-to-ceiling windows onto the city',
+    vimeoId: '159484080',
+    stills: [
+      {
+        image: `${baseUrl}work/sky-pause-carry-on/concept-1.jpg`,
+        alt: 'Rendered visual of the apartment at dusk, with an arc lamp, sofa and floor-to-ceiling windows onto the city',
+      },
+      {
+        image: `${baseUrl}work/sky-pause-carry-on/concept-2.jpg`,
+        alt: 'Rendered visual of the apartment with timber floor, open shelving and a night-time city view',
+      },
+      {
+        image: `${baseUrl}work/sky-pause-carry-on/set-build.jpg`,
+        alt: 'The apartment set under construction on a raised platform in a studio',
+      },
+    ],
   },
   {
     title: 'Ancestry',
@@ -46,14 +62,52 @@ const projects = [
 const REVEAL_STEP_MS = 450
 
 function ProjectTile({ project, visible, onLoad }) {
-  return (
-    <article className={visible ? 'project is-visible' : 'project'}>
+  const content = (
+    <>
       <div className="project-media">
         <img src={project.image} alt={project.alt} loading="lazy" onLoad={onLoad} onError={onLoad} />
       </div>
       <div className="project-caption">
         <h3>{project.title}</h3>
         <span>{project.category}</span>
+      </div>
+    </>
+  )
+
+  return (
+    <article className={visible ? 'project is-visible' : 'project'}>
+      {project.slug ? (
+        <a className="project-link" href={`?project=${project.slug}`}>
+          {content}
+        </a>
+      ) : (
+        content
+      )}
+    </article>
+  )
+}
+
+function ProjectPage({ project }) {
+  return (
+    <article className="project-page">
+      <header className="project-page-header">
+        <h1>{project.title}</h1>
+        <span>{project.category}</span>
+      </header>
+
+      <div className="project-video">
+        <iframe
+          src={`https://player.vimeo.com/video/${project.vimeoId}?dnt=1&title=0&byline=0&portrait=0`}
+          title={project.title}
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+
+      <div className="project-stills">
+        {project.stills.map((still) => (
+          <img key={still.image} src={still.image} alt={still.alt} loading="lazy" />
+        ))}
       </div>
     </article>
   )
@@ -107,7 +161,10 @@ function HomeImage() {
 }
 
 function App() {
-  const currentPage = new URLSearchParams(window.location.search).get('page') || 'home'
+  const params = new URLSearchParams(window.location.search)
+  const currentProject = projects.find(
+    (project) => project.slug && project.slug === params.get('project'),
+  )
   const pageDetails = {
     commercial: {
       title: 'Commercial',
@@ -118,6 +175,10 @@ function App() {
       projects: projects.filter((project) => project.category === 'Film & TV'),
     },
   }
+  // A project page highlights its category in the nav.
+  const currentPage = currentProject
+    ? Object.keys(pageDetails).find((key) => pageDetails[key].title === currentProject.category)
+    : params.get('page') || 'home'
   const currentView = pageDetails[currentPage]
 
   return (
@@ -142,7 +203,9 @@ function App() {
       </header>
 
       <main id="top" className="page-content">
-        {currentPage === 'home' ? (
+        {currentProject ? (
+          <ProjectPage project={currentProject} />
+        ) : currentPage === 'home' ? (
           <HomeImage />
         ) : currentView ? (
           <section className="section">

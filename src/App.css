@@ -181,6 +181,54 @@
   object-position: center bottom;
 }
 
+.project-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.project-page-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 14px;
+  font-size: 0.72rem;
+}
+
+.project-page-header h1 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: 400;
+}
+
+.project-page-header span {
+  color: #74716d;
+}
+
+.project-video {
+  aspect-ratio: 16 / 9;
+  background: #111;
+}
+
+.project-video iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.project-stills {
+  display: grid;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.project-stills img {
+  width: 100%;
+  background: #e6e3de;
+}
+
 .project-media {
   overflow: hidden;
   background: #e6e3de;
