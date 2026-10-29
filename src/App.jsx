@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
 
 const baseUrl = import.meta.env.BASE_URL
@@ -93,7 +93,74 @@ function ProjectTile({ project, visible, onLoad }) {
   )
 }
 
+function Chevron({ direction }) {
+  return (
+    <svg viewBox="0 0 14 28" width="14" height="28" aria-hidden="true">
+      <path
+        d={direction === 'left' ? 'M13 1 1 14l12 13' : 'M1 1l12 13L1 27'}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1"
+      />
+    </svg>
+  )
+}
+
+function StillsLightbox({ stills, index, onStep, onClose }) {
+  const dialogRef = useRef(null)
+  const still = stills[index]
+
+  useEffect(() => {
+    dialogRef.current.showModal()
+  }, [])
+
+  useEffect(() => {
+    const handleKey = (event) => {
+      if (event.key === 'ArrowLeft') onStep(-1)
+      if (event.key === 'ArrowRight') onStep(1)
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [onStep])
+
+  return (
+    // Clicking the backdrop (the dialog itself, not its contents) closes it; Esc is handled natively.
+    <dialog
+      ref={dialogRef}
+      className="lightbox"
+      aria-label="Enlarged still"
+      onClose={onClose}
+      onClick={(event) => event.target === event.currentTarget && dialogRef.current.close()}
+    >
+      <img src={still.image} alt={still.alt} />
+      <div className="lightbox-controls">
+        {stills.length > 1 && (
+          <>
+            <button type="button" onClick={() => onStep(-1)}>Previous</button>
+            <span>{index + 1} / {stills.length}</span>
+            <button type="button" onClick={() => onStep(1)}>Next</button>
+          </>
+        )}
+        <button type="button" onClick={() => dialogRef.current.close()}>Close</button>
+      </div>
+    </dialog>
+  )
+}
+
 function ProjectPage({ project }) {
+  const [openStill, setOpenStill] = useState(null)
+  const stepStill = useCallback(
+    (step) =>
+      setOpenStill((index) => (index + step + project.stills.length) % project.stills.length),
+    [project.stills.length],
+  )
+
+  // Arrows cycle through the projects that have their own page, wrapping at either end.
+  const pagedProjects = projects.filter((item) => item.slug)
+  const position = pagedProjects.indexOf(project)
+  const previous = pagedProjects[(position - 1 + pagedProjects.length) % pagedProjects.length]
+  const next = pagedProjects[(position + 1) % pagedProjects.length]
+
   return (
     <article className="project-page">
       <header className="project-page-header">
@@ -101,29 +168,60 @@ function ProjectPage({ project }) {
         <span>{project.category}</span>
       </header>
 
-      <div className="project-video">
-        <iframe
-          src={`https://player.vimeo.com/video/${project.vimeoId}?dnt=1&title=0&byline=0&portrait=0`}
-          title={project.title}
-          allow="autoplay; fullscreen; picture-in-picture"
-          allowFullScreen
-        />
+      <div className="project-video-row">
+        <div className="project-video">
+          <iframe
+            src={`https://player.vimeo.com/video/${project.vimeoId}?dnt=1&title=0&byline=0&portrait=0`}
+            title={project.title}
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+
+        {pagedProjects.length > 1 && (
+          <>
+            <a
+              className="project-arrow project-arrow-previous"
+              href={`?project=${previous.slug}`}
+              aria-label={`Previous project: ${previous.title}`}
+            >
+              <Chevron direction="left" />
+            </a>
+            <a
+              className="project-arrow project-arrow-next"
+              href={`?project=${next.slug}`}
+              aria-label={`Next project: ${next.title}`}
+            >
+              <Chevron direction="right" />
+            </a>
+          </>
+        )}
       </div>
 
       <div className="project-stills">
         {/* Each still grows in proportion to its aspect ratio, so the row shares one height. */}
-        {project.stills.map((still) => (
-          <img
+        {project.stills.map((still, index) => (
+          <button
             key={still.image}
-            src={still.image}
-            alt={still.alt}
-            width={still.width}
-            height={still.height}
-            loading="lazy"
+            type="button"
+            className="project-still"
             style={{ flexGrow: still.width / still.height }}
-          />
+            onClick={() => setOpenStill(index)}
+            aria-label={`Enlarge: ${still.alt}`}
+          >
+            <img src={still.image} alt="" width={still.width} height={still.height} loading="lazy" />
+          </button>
         ))}
       </div>
+
+      {openStill !== null && (
+        <StillsLightbox
+          stills={project.stills}
+          index={openStill}
+          onStep={stepStill}
+          onClose={() => setOpenStill(null)}
+        />
+      )}
     </article>
   )
 }
