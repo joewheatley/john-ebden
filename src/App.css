@@ -164,6 +164,23 @@
   }
 }
 
+.home-image {
+  margin: 0;
+  opacity: 0;
+  transition: opacity 1800ms ease;
+}
+
+.home-image.is-visible {
+  opacity: 1;
+}
+
+.home-image img {
+  width: 100%;
+  max-height: calc(100vh - 200px);
+  object-fit: cover;
+  object-position: center bottom;
+}
+
 .project-media {
   overflow: hidden;
   background: #e6e3de;

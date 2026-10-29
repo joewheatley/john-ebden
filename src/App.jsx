@@ -91,10 +91,24 @@ function ProjectGrid({ items, label }) {
   )
 }
 
+function HomeImage() {
+  const [loaded, setLoaded] = useState(false)
+
+  return (
+    <figure className={loaded ? 'home-image is-visible' : 'home-image'}>
+      <img
+        src={`${baseUrl}work/carlsberg-climbers-hut.jpg`}
+        alt="Carlsberg: a weathered timber climbers’ hut with a smoking chimney beneath a rocky mountainside in New Zealand"
+        onLoad={() => setLoaded(true)}
+        onError={() => setLoaded(true)}
+      />
+    </figure>
+  )
+}
+
 function App() {
-  const currentPage = new URLSearchParams(window.location.search).get('page') || 'featured'
+  const currentPage = new URLSearchParams(window.location.search).get('page') || 'home'
   const pageDetails = {
-    featured: { title: 'Featured', projects },
     commercial: {
       title: 'Commercial',
       projects: projects.filter((project) => project.category === 'Commercial'),
@@ -115,7 +129,6 @@ function App() {
         </a>
 
         <nav className="main-nav" aria-label="Main navigation">
-          <a href={baseUrl} aria-current={currentPage === 'featured' ? 'page' : undefined}>Featured</a>
           <a href="?page=commercial" aria-current={currentPage === 'commercial' ? 'page' : undefined}>
             Commercial
           </a>
@@ -129,7 +142,9 @@ function App() {
       </header>
 
       <main id="top" className="page-content">
-        {currentView ? (
+        {currentPage === 'home' ? (
+          <HomeImage />
+        ) : currentView ? (
           <section className="section">
             <h1 className="section-title">{currentView.title}</h1>
             <ProjectGrid items={currentView.projects} label={`${currentView.title} projects`} />
