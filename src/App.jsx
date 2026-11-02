@@ -3,29 +3,35 @@ import './App.css'
 
 const baseUrl = import.meta.env.BASE_URL
 
+// Production companies and directors are from John's “Website Breakdown OCT 6”; leave them out where unknown.
 const projects = [
   {
-    title: 'Sky: Pause and Carry On',
+    title: 'Sky',
     slug: 'sky-pause-and-carry-on',
     category: 'Commercial',
+    company: 'Biscuit',
+    director: 'Johnny Green',
     image: `${baseUrl}work/sky-pause-carry-on-frame.jpg`,
     alt: 'A dusk-lit apartment living room with floor-to-ceiling windows onto the city',
     vimeoId: '159484080',
     stills: [
       {
         image: `${baseUrl}work/sky-pause-carry-on/concept-1.jpg`,
+        label: 'Concept',
         width: 2400,
         height: 1331,
         alt: 'Rendered visual of the apartment at dusk, with an arc lamp, sofa and floor-to-ceiling windows onto the city',
       },
       {
         image: `${baseUrl}work/sky-pause-carry-on/concept-2.jpg`,
+        label: 'Concept',
         width: 1600,
         height: 916,
         alt: 'Rendered visual of the apartment with timber floor, open shelving and a night-time city view',
       },
       {
         image: `${baseUrl}work/sky-pause-carry-on/set-build.jpg`,
+        label: 'Build',
         width: 2400,
         height: 1462,
         alt: 'The apartment set under construction on a raised platform in a studio',
@@ -35,12 +41,16 @@ const projects = [
   {
     title: 'Ancestry',
     category: 'Commercial',
+    company: 'Biscuit',
+    director: 'Lawn Murro',
     image: `${baseUrl}work/ancestry-frame.jpg`,
     alt: 'A butcher’s counter beneath a wall of hanging sausages',
   },
   {
     title: 'Crunchy Nut',
     category: 'Commercial',
+    company: 'Rattling Stick',
+    director: 'Daniel Kleinman',
     image: `${baseUrl}work/crunchy-nut-frame.jpg`,
     alt: 'A candlelit, gilded confectioner’s shop with bowls of chocolate truffles',
   },
@@ -64,6 +74,17 @@ const projects = [
   },
 ]
 
+// Title followed by the production company in grey, like the masthead.
+function ProjectName({ project }) {
+  return project.company ? (
+    <>
+      {project.title}, <span className="project-company">{project.company}</span>
+    </>
+  ) : (
+    project.title
+  )
+}
+
 // Time between one tile starting to fade in and the next.
 const REVEAL_STEP_MS = 450
 
@@ -74,8 +95,10 @@ function ProjectTile({ project, visible, onLoad }) {
         <img src={project.image} alt={project.alt} loading="lazy" onLoad={onLoad} onError={onLoad} />
       </div>
       <div className="project-caption">
-        <h3>{project.title}</h3>
-        <span>{project.category}</span>
+        <h3>
+          <ProjectName project={project} />
+        </h3>
+        {project.director && <span>{project.director}</span>}
       </div>
     </>
   )
@@ -134,6 +157,7 @@ function StillsLightbox({ stills, index, onStep, onClose }) {
     >
       <img src={still.image} alt={still.alt} />
       <div className="lightbox-controls">
+        {still.label && <span className="lightbox-label">{still.label}</span>}
         {stills.length > 1 && (
           <>
             <button type="button" onClick={() => onStep(-1)}>Previous</button>
@@ -164,8 +188,10 @@ function ProjectPage({ project }) {
   return (
     <article className="project-page">
       <header className="project-page-header">
-        <h1>{project.title}</h1>
-        <span>{project.category}</span>
+        <h1>
+          <ProjectName project={project} />
+        </h1>
+        {project.director && <span>{project.director}</span>}
       </header>
 
       <div className="project-video-row">
@@ -209,6 +235,7 @@ function ProjectPage({ project }) {
             aria-label={`Enlarge: ${still.alt}`}
           >
             <img src={still.image} alt="" width={still.width} height={still.height} loading="lazy" />
+            {still.label && <span className="project-still-label">{still.label}</span>}
           </button>
         ))}
       </div>
@@ -361,7 +388,6 @@ function App() {
 
       <footer className="site-footer">
         <span>© {new Date().getFullYear()} John Ebden</span>
-        <span>Production Designer</span>
       </footer>
     </div>
   )

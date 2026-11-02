@@ -272,6 +272,15 @@
   transition: opacity 300ms ease;
 }
 
+.project-still-label {
+  display: block;
+  padding-top: 8px;
+  background: #f3efe8;
+  color: #74716d;
+  font-size: 0.72rem;
+  text-align: left;
+}
+
 .project-still:hover img {
   opacity: 0.85;
 }
@@ -377,7 +386,8 @@ html:has(.lightbox[open]) {
   font-weight: 400;
 }
 
-.project-caption span {
+.project-caption span,
+.project-company {
   color: #74716d;
 }
 
@@ -494,7 +504,7 @@ html:has(.lightbox[open]) {
     width: 100%;
   }
 
-  .project-caption span {
+  .project-caption > span {
     display: block;
     margin-top: 3px;
   }
