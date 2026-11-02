@@ -17,7 +17,7 @@
 
 html {
   /* All type sizes are in rem, so this scales them together without touching spacing. */
-  font-size: 125%;
+  font-size: 137.5%;
   scroll-behavior: smooth;
 }
 
