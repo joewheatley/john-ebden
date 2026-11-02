@@ -85,6 +85,16 @@
   flex: 1;
 }
 
+/* Hidden on screen but still read out, so each page keeps a heading. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .section-title {
   margin: 0 0 14px;
   color: #74716d;
@@ -373,11 +383,14 @@ html:has(.lightbox[open]) {
 }
 
 .project-caption {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: baseline;
   padding-top: 8px;
+}
+
+/* Director sits on its own line under the title, a step smaller. */
+.project-caption .project-director {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.62rem;
 }
 
 .project-caption h3 {
@@ -454,10 +467,6 @@ html:has(.lightbox[open]) {
     gap: 32px;
   }
 
-  .project-caption {
-    display: block;
-  }
-
   .project-stills {
     flex-direction: column;
   }
@@ -504,10 +513,6 @@ html:has(.lightbox[open]) {
     width: 100%;
   }
 
-  .project-caption > span {
-    display: block;
-    margin-top: 3px;
-  }
 
   .info {
     justify-content: flex-start;

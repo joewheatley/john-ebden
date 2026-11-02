@@ -98,7 +98,7 @@ function ProjectTile({ project, visible, onLoad }) {
         <h3>
           <ProjectName project={project} />
         </h3>
-        {project.director && <span>Dir: {project.director}</span>}
+        {project.director && <span className="project-director">Dir: {project.director}</span>}
       </div>
     </>
   )
@@ -348,7 +348,7 @@ function App() {
           <HomeImage />
         ) : currentView ? (
           <section className="section">
-            <h1 className="section-title">{currentView.title}</h1>
+            <h1 className="visually-hidden">{currentView.title}</h1>
             <ProjectGrid items={currentView.projects} label={`${currentView.title} projects`} />
           </section>
         ) : (
