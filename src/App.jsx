@@ -98,7 +98,7 @@ function ProjectTile({ project, visible, onLoad }) {
         <h3>
           <ProjectName project={project} />
         </h3>
-        {project.director && <span>{project.director}</span>}
+        {project.director && <span>Dir: {project.director}</span>}
       </div>
     </>
   )
@@ -191,7 +191,7 @@ function ProjectPage({ project }) {
         <h1>
           <ProjectName project={project} />
         </h1>
-        {project.director && <span>{project.director}</span>}
+        {project.director && <span>Dir: {project.director}</span>}
       </header>
 
       <div className="project-video-row">
