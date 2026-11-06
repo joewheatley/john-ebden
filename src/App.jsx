@@ -1,78 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
+import { projects } from './projects'
 
 const baseUrl = import.meta.env.BASE_URL
-
-// Production companies and directors are from John's “Website Breakdown OCT 6”; leave them out where unknown.
-const projects = [
-  {
-    title: 'Sky',
-    slug: 'sky-pause-and-carry-on',
-    category: 'Commercial',
-    company: 'Biscuit',
-    director: 'Johnny Green',
-    image: `${baseUrl}work/sky-pause-carry-on-frame.jpg`,
-    alt: 'A dusk-lit apartment living room with floor-to-ceiling windows onto the city',
-    vimeoId: '159484080',
-    stills: [
-      {
-        image: `${baseUrl}work/sky-pause-carry-on/concept-1.jpg`,
-        label: 'Concept',
-        width: 2400,
-        height: 1331,
-        alt: 'Rendered visual of the apartment at dusk, with an arc lamp, sofa and floor-to-ceiling windows onto the city',
-      },
-      {
-        image: `${baseUrl}work/sky-pause-carry-on/concept-2.jpg`,
-        label: 'Concept',
-        width: 1600,
-        height: 916,
-        alt: 'Rendered visual of the apartment with timber floor, open shelving and a night-time city view',
-      },
-      {
-        image: `${baseUrl}work/sky-pause-carry-on/set-build.jpg`,
-        label: 'Build',
-        width: 2400,
-        height: 1462,
-        alt: 'The apartment set under construction on a raised platform in a studio',
-      },
-    ],
-  },
-  {
-    title: 'Ancestry',
-    category: 'Commercial',
-    company: 'Biscuit',
-    director: 'Lawn Murro',
-    image: `${baseUrl}work/ancestry-frame.jpg`,
-    alt: 'A butcher’s counter beneath a wall of hanging sausages',
-  },
-  {
-    title: 'Crunchy Nut',
-    category: 'Commercial',
-    company: 'Rattling Stick',
-    director: 'Daniel Kleinman',
-    image: `${baseUrl}work/crunchy-nut-frame.jpg`,
-    alt: 'A candlelit, gilded confectioner’s shop with bowls of chocolate truffles',
-  },
-  {
-    title: 'O2',
-    category: 'Commercial',
-    image: `${baseUrl}work/o2-web.jpg`,
-    alt: 'A brightly dressed bedroom with green walls and a desk',
-  },
-  {
-    title: 'Love Box',
-    category: 'Film & TV',
-    image: `${baseUrl}work/love-box-web.jpg`,
-    alt: 'A black-and-white family scene in a period sitting room',
-  },
-  {
-    title: 'Dreamers',
-    category: 'Film & TV',
-    image: `${baseUrl}work/dreamers-web.jpg`,
-    alt: 'A lived-in blue hallway with coats and shoes',
-  },
-]
 
 // Title followed by the production company in grey, like the masthead.
 function ProjectName({ project }) {
@@ -171,6 +101,29 @@ function StillsLightbox({ stills, index, onStep, onClose }) {
   )
 }
 
+const STILLS_PER_ROW = 3
+
+// Splits stills into rows of three. A short last row is padded with empty space so its stills
+// stay the same size as the rows above instead of stretching across the page.
+function stillRows(stills) {
+  const rows = []
+  for (let start = 0; start < stills.length; start += STILLS_PER_ROW) {
+    rows.push(stills.slice(start, start + STILLS_PER_ROW))
+  }
+  return rows
+}
+
+const aspect = (still) => still.width / still.height
+
+function StillButton({ still, onOpen, className = 'project-still', style }) {
+  return (
+    <button type="button" className={className} style={style} onClick={onOpen} aria-label={`Enlarge: ${still.alt}`}>
+      <img src={still.image} alt="" width={still.width} height={still.height} loading="lazy" />
+      {still.label && <span className="project-still-label">{still.label}</span>}
+    </button>
+  )
+}
+
 function ProjectPage({ project }) {
   const [openStill, setOpenStill] = useState(null)
   const stepStill = useCallback(
@@ -179,11 +132,23 @@ function ProjectPage({ project }) {
     [project.stills.length],
   )
 
-  // Arrows cycle through the projects that have their own page, wrapping at either end.
-  const pagedProjects = projects.filter((item) => item.slug)
-  const position = pagedProjects.indexOf(project)
-  const previous = pagedProjects[(position - 1 + pagedProjects.length) % pagedProjects.length]
-  const next = pagedProjects[(position + 1) % pagedProjects.length]
+  // Arrows cycle through the other projects in the same category, wrapping at either end.
+  const siblings = projects.filter((item) => item.category === project.category)
+  const position = siblings.indexOf(project)
+  const previous = siblings[(position - 1 + siblings.length) % siblings.length]
+  const next = siblings[(position + 1) % siblings.length]
+
+  // Videos are on John's Vimeo, or YouTube or the BBC's own player where he has no Vimeo copy.
+  const videoUrl = project.vimeoId
+    ? `https://player.vimeo.com/video/${project.vimeoId}?dnt=1&title=0&byline=0&portrait=0`
+    : project.youtubeId
+      ? `https://www.youtube-nocookie.com/embed/${project.youtubeId}?rel=0`
+      : project.bbcClipId && `https://www.bbc.co.uk/programmes/${project.bbcClipId}/player`
+
+  // Without a video, the first still leads the page at full width.
+  const heroStill = videoUrl ? null : project.stills[0]
+  const gridOffset = heroStill ? 1 : 0
+  const rows = stillRows(project.stills.slice(gridOffset))
 
   return (
     <article className="project-page">
@@ -195,50 +160,58 @@ function ProjectPage({ project }) {
       </header>
 
       <div className="project-video-row">
-        <div className="project-video">
-          <iframe
-            src={`https://player.vimeo.com/video/${project.vimeoId}?dnt=1&title=0&byline=0&portrait=0`}
-            title={project.title}
-            allow="autoplay; fullscreen; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
+        {heroStill ? (
+          <StillButton still={heroStill} className="project-still project-hero" onOpen={() => setOpenStill(0)} />
+        ) : (
+          <div className="project-video">
+            <iframe
+              src={videoUrl}
+              title={project.title}
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        )}
 
-        {/* With only one project page the arrows still show, but have nowhere to go yet. */}
         <a
           className="project-arrow project-arrow-previous"
-          href={previous === project ? undefined : `?project=${previous.slug}`}
+          href={`?project=${previous.slug}`}
           aria-label={`Previous project: ${previous.title}`}
-          aria-disabled={previous === project || undefined}
         >
           <Chevron direction="left" />
         </a>
-        <a
-          className="project-arrow project-arrow-next"
-          href={next === project ? undefined : `?project=${next.slug}`}
-          aria-label={`Next project: ${next.title}`}
-          aria-disabled={next === project || undefined}
-        >
+        <a className="project-arrow project-arrow-next" href={`?project=${next.slug}`} aria-label={`Next project: ${next.title}`}>
           <Chevron direction="right" />
         </a>
       </div>
 
-      <div className="project-stills">
-        {/* Each still grows in proportion to its aspect ratio, so the row shares one height. */}
-        {project.stills.map((still, index) => (
-          <button
-            key={still.image}
-            type="button"
-            className="project-still"
-            style={{ flexGrow: still.width / still.height }}
-            onClick={() => setOpenStill(index)}
-            aria-label={`Enlarge: ${still.alt}`}
-          >
-            <img src={still.image} alt="" width={still.width} height={still.height} loading="lazy" />
-            {still.label && <span className="project-still-label">{still.label}</span>}
-          </button>
-        ))}
-      </div>
+      {rows.length > 0 && (
+        <div className="project-stills">
+          {rows.map((row, rowIndex) => {
+            const meanAspect = row.reduce((sum, still) => sum + aspect(still), 0) / row.length
+            return (
+              <div key={row[0].image} className="project-stills-row">
+                {/* Each still grows in proportion to its aspect ratio, so the row shares one height. */}
+                {row.map((still, index) => (
+                  <StillButton
+                    key={still.image}
+                    still={still}
+                    style={{ flexGrow: aspect(still) }}
+                    onOpen={() => setOpenStill(gridOffset + rowIndex * STILLS_PER_ROW + index)}
+                  />
+                ))}
+                {row.length < STILLS_PER_ROW && rows.length > 1 && (
+                  <span
+                    className="project-stills-spacer"
+                    style={{ flexGrow: meanAspect * (STILLS_PER_ROW - row.length) }}
+                    aria-hidden="true"
+                  />
+                )}
+              </div>
+            )
+          })}
+        </div>
+      )}
 
       {openStill !== null && (
         <StillsLightbox

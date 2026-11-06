@@ -263,8 +263,18 @@
 
 .project-stills {
   display: flex;
-  gap: 14px;
+  flex-direction: column;
+  gap: 22px;
   margin-top: 14px;
+}
+
+.project-stills-row {
+  display: flex;
+  gap: 14px;
+}
+
+.project-stills-spacer {
+  flex-basis: 0;
 }
 
 .project-still {
@@ -293,6 +303,18 @@
 
 .project-still:hover img {
   opacity: 0.85;
+}
+
+/* A project without a video leads with its first still, cropped to fit the window if tall. */
+.project-hero {
+  display: block;
+  flex: 0 0 100%;
+  width: 100%;
+}
+
+.project-hero img {
+  max-height: calc(100vh - 160px);
+  object-fit: cover;
 }
 
 .lightbox[open] {
@@ -467,8 +489,12 @@ html:has(.lightbox[open]) {
     gap: 32px;
   }
 
-  .project-stills {
+  .project-stills-row {
     flex-direction: column;
+  }
+
+  .project-stills-spacer {
+    display: none;
   }
 
   .project-still {
