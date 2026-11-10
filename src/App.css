@@ -176,10 +176,10 @@
 
 /*
  * 85% of the page width, or of the window height left between masthead and footer,
- * whichever is smaller (1001 / 544 is the image's aspect ratio), so it is never cropped.
+ * whichever is smaller (1671 / 941 is the image's aspect ratio), so it is never cropped.
  */
 .home-image {
-  width: min(85%, calc((100vh - 200px) * 0.85 * 1001 / 544));
+  width: min(85%, calc((100vh - 200px) * 0.85 * 1671 / 941));
   margin: 0 auto;
   opacity: 0;
   transition: opacity 1800ms ease;
@@ -268,8 +268,10 @@
   margin-top: 14px;
 }
 
+/* Top-aligned, so an unlabelled set still isn't stretched to the height of a labelled neighbour. */
 .project-stills-row {
   display: flex;
+  align-items: flex-start;
   gap: 14px;
 }
 

@@ -263,8 +263,8 @@ function HomeImage() {
   return (
     <figure className={loaded ? 'home-image is-visible' : 'home-image'}>
       <img
-        src={`${baseUrl}work/carlsberg-climbers-hut.jpg`}
-        alt="Carlsberg: a weathered timber climbers’ hut with a smoking chimney beneath a rocky mountainside in New Zealand"
+        src={`${baseUrl}work/home-egyptian-set.jpg`}
+        alt="An ancient Egyptian set: a stone gateway flanked by pharaoh statues, with a chariot, horses and cast in costume beneath bamboo scaffolding"
         onLoad={() => setLoaded(true)}
         onError={() => setLoaded(true)}
       />
