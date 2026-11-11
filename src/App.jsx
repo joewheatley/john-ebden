@@ -264,7 +264,7 @@ function HomeImage() {
     <figure className={loaded ? 'home-image is-visible' : 'home-image'}>
       <img
         src={`${baseUrl}work/home-egyptian-set.jpg`}
-        alt="An ancient Egyptian set: a stone gateway flanked by pharaoh statues, with a chariot, horses and cast in costume beneath bamboo scaffolding"
+        alt="An ancient Egyptian set: a stone gateway flanked by pharaoh statues, with a chariot, horses and cast in costume in the sand against a bluescreen sky"
         onLoad={() => setLoaded(true)}
         onError={() => setLoaded(true)}
       />
@@ -326,34 +326,41 @@ function App() {
           </section>
         ) : (
           <section className="info-page">
-            <h1 className="section-title">Info</h1>
-            <div className="info-content">
-              <p className="info-bio">
-                John Ebden is a production designer whose work spans commercials, television,
-                feature and short films. He has collaborated with leading directors including
-                Peter Richardson, Aki Kaurismäki, Daniel Kleinman, Gary Freedman, Sara Dunlop
-                and Aidan Zamiri, among others.
-              </p>
+            <h1 className="visually-hidden">Info</h1>
+            <div className="agent-list">
+              <section className="agent-entry">
+                <h2 className="section-title">Agent</h2>
+                <address>
+                  Andrew Naylor<br />
+                  <a href="mailto:anaylor@unitedagents.co.uk">anaylor@unitedagents.co.uk</a><br />
+                  <a href="tel:+442032140899">+44 (0) 203 214 0899</a>
+                </address>
+              </section>
 
-              <div className="agent-list">
-                <section className="agent-entry">
-                  <h2 className="section-title">Agent</h2>
-                  <address>
-                    Andrew Naylor<br />
-                    <a href="mailto:anaylor@unitedagents.co.uk">anaylor@unitedagents.co.uk</a><br />
-                    <a href="tel:+442032140899">+44 (0) 203 214 0899</a>
-                  </address>
-                </section>
+              <section className="agent-entry">
+                <h2 className="section-title">Associate Agent</h2>
+                <address>
+                  Lizzie Quinn<br />
+                  <a href="mailto:lquinn@unitedagents.co.uk">lquinn@unitedagents.co.uk</a><br />
+                  <a href="tel:+442032140864">+44 (0) 20 3214 0864</a>
+                </address>
+              </section>
 
-                <section className="agent-entry">
-                  <h2 className="section-title">Associate Agent</h2>
-                  <address>
-                    Lizzie Quinn<br />
-                    <a href="mailto:lquinn@unitedagents.co.uk">lquinn@unitedagents.co.uk</a><br />
-                    <a href="tel:+442032140864">+44 (0) 20 3214 0864</a>
-                  </address>
-                </section>
-              </div>
+              <section className="agent-entry">
+                <h2 className="section-title">United Agents</h2>
+                <address>
+                  <a href="https://www.unitedagents.co.uk/john-ebden/" target="_blank" rel="noreferrer">
+                    unitedagents.co.uk/john-ebden
+                  </a>
+                </address>
+              </section>
+
+              <section className="agent-entry">
+                <h2 className="section-title">Email</h2>
+                <address>
+                  <a href="mailto:johnebden99@gmail.com">johnebden99@gmail.com</a>
+                </address>
+              </section>
             </div>
           </section>
         )}

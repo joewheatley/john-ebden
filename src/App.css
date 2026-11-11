@@ -102,35 +102,25 @@
   font-weight: 400;
 }
 
-.info-content {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr);
-  gap: 64px;
-  max-width: 1040px;
-}
-
-.info-bio {
-  max-width: 680px;
-  margin: 0;
-  color: #66625d;
-  font-size: 1rem;
-  line-height: 1.7;
-}
-
 .agent-list {
   display: grid;
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 40px 48px;
+  /* Two columns at most, so the four entries sit as a neat two-by-two. */
+  max-width: 880px;
 }
 
+/* Info text is the same size as the masthead name. */
 .agent-entry .section-title {
   margin-bottom: 8px;
+  font-size: 1rem;
 }
 
 .agent-entry address {
-  color: #66625d;
-  font-size: 0.78rem;
+  color: #161616;
+  font-size: 1rem;
   font-style: normal;
-  line-height: 1.7;
+  line-height: 1.5;
 }
 
 .agent-entry a {
@@ -176,10 +166,10 @@
 
 /*
  * 85% of the page width, or of the window height left between masthead and footer,
- * whichever is smaller (1671 / 941 is the image's aspect ratio), so it is never cropped.
+ * whichever is smaller (the image file is 16:9), so it always fits the window uncropped.
  */
 .home-image {
-  width: min(85%, calc((100vh - 200px) * 0.85 * 1671 / 941));
+  width: min(85%, calc((100vh - 200px) * 0.85 * 16 / 9));
   margin: 0 auto;
   opacity: 0;
   transition: opacity 1800ms ease;
@@ -486,9 +476,9 @@ html:has(.lightbox[open]) {
     gap: 22px 10px;
   }
 
-  .info-content {
+  .agent-list {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 28px;
   }
 
   .project-stills-row {
