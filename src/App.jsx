@@ -354,14 +354,15 @@ function App() {
                   </a>
                 </address>
               </section>
-
-              <section className="agent-entry">
-                <h2 className="section-title">Email</h2>
-                <address>
-                  <a href="mailto:johnebden99@gmail.com">johnebden99@gmail.com</a>
-                </address>
-              </section>
             </div>
+
+            {/* John's own email sits apart from the agency contacts. */}
+            <section className="agent-entry personal-contact">
+              <h2 className="section-title">Email</h2>
+              <address>
+                <a href="mailto:johnebden99@gmail.com">johnebden99@gmail.com</a>
+              </address>
+            </section>
           </section>
         )}
       </main>

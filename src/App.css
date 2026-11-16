@@ -106,8 +106,13 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 40px 48px;
-  /* Two columns at most, so the four entries sit as a neat two-by-two. */
+  /* Two columns at most: the agents side by side, United Agents below. */
   max-width: 880px;
+}
+
+/* John's own email, set well apart from the agency contacts. */
+.personal-contact {
+  margin-top: 96px;
 }
 
 /* Info text is the same size as the masthead name. */
@@ -479,6 +484,10 @@ html:has(.lightbox[open]) {
   .agent-list {
     grid-template-columns: 1fr;
     gap: 28px;
+  }
+
+  .personal-contact {
+    margin-top: 64px;
   }
 
   .project-stills-row {

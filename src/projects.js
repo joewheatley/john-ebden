@@ -124,7 +124,7 @@ export const projects = [
       still('amazon-prime/concept-1.jpg', 1654, 1174, 'Concept', 'Amazon Prime, render of the flat’s front door with a parcel on the mat'),
       still('amazon-prime/concept-2.jpg', 2212, 1112, 'Concept', 'Amazon Prime, render of the dining room and galley kitchen'),
       still('amazon-prime/concept-3.jpg', 2216, 1252, 'Concept', 'Amazon Prime, render of the living room looking towards the kitchen'),
-      still('amazon-prime/concept-4.jpg', 2050, 1498, 'Concept', 'Amazon Prime, 3D floor plan of the apartment'),
+      still('amazon-prime/concept-4.jpg', 2050, 1498, 'SketchUp', 'Amazon Prime, 3D floor plan of the apartment'),
     ],
   },
   {
@@ -172,7 +172,7 @@ export const projects = [
       still('chase/concept-1.jpg', 2400, 1266, 'Concept', 'Chase, concept art'),
       still('chase/concept-2.jpg', 2400, 1346, 'Concept', 'Chase, concept art'),
       still('chase/concept-3.jpg', 1810, 1078, 'Concept', 'Chase, concept art'),
-      still('chase/concept-4.jpg', 2400, 1259, 'Concept', 'Chase, concept art'),
+      still('chase/concept-4.jpg', 2400, 1259, 'SketchUp', 'Chase, SketchUp floor plan and 3D model of the flat'),
     ],
   },
   {
